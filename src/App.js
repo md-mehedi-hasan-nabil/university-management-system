@@ -25,14 +25,14 @@ export default function App() {
   const auth = useSelector((state) => state.auth);
   const [id, setId] = useState('');
   const [loadData, setLoadData] = useState(true);
-
+   
   useEffect(() => {
     if (auth?.user?.id) {
       setId(auth?.user?.id);
       setLoadData(false);
     }
   }, [auth?.user?.id]);
-
+// redux query
   const { isSuccess } = useGetUserQuery(
     { id },
     {
