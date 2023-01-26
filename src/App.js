@@ -32,7 +32,8 @@ export default function App() {
       setLoadData(false);
     }
   }, [auth?.user?.id]);
-// redux query
+
+  
   const { isSuccess } = useGetUserQuery(
     { id },
     {
