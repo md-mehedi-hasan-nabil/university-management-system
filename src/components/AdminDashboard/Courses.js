@@ -105,7 +105,7 @@ export default function Courses() {
                 id="checkbox-table-search-1"
                 onChange={(e) => handleChange(e.target.checked, course)}
                 type="checkbox"
-                checked={course.courseAdvising}
+                checked={course?.courseAdvising}
                 className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2"
               />
               <label htmlFor="checkbox-table-search-1" className="sr-only">

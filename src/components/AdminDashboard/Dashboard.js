@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGetAllUserQuery } from '../../features/auth/authApi';
+import AddNewStudent from './AddNewStudent';
+import Modal from '../Modal';
 
 export default function Dashboard() {
   const { isLoading, isSuccess, data: students } = useGetAllUserQuery();
+
+  const [open, setOpen] = useState(false)
 
   return (
     <main className="p-6 sm:p-10 space-y-6">
@@ -29,7 +33,7 @@ export default function Dashboard() {
             </svg>
             Manage dashboard
           </button>
-          <button className="inline-flex px-5 py-3 text-white bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 rounded-md ml-6 mb-3">
+          <button onClick={() => setOpen(true)} className="inline-flex px-5 py-3 text-white bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 rounded-md ml-6 mb-3">
             <svg
               aria-hidden="true"
               fill="none"
@@ -44,8 +48,9 @@ export default function Dashboard() {
                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"
               ></path>
             </svg>
-            Create new dashboard
+            Create new student
           </button>
+
         </div>
       </div>
       <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -259,6 +264,9 @@ export default function Dashboard() {
           </div>
         </div>
       </section>
+      <Modal open={open} setOpen={setOpen}>
+        <AddNewStudent />
+      </Modal>
     </main>
   );
 }
