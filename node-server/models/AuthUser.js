@@ -44,10 +44,12 @@ const authUserSchema = new Schema(
       default: 'user',
     },
     registeredCourse: {
-      type: [],
+      type: [Schema.Types.ObjectId],
+      ref: "Course",
     },
     selectedSections: {
-      type: [],
+      type: [Schema.Types.ObjectId],
+      ref: "Course",
     },
   },
   {

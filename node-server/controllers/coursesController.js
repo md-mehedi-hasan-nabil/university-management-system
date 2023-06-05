@@ -1,5 +1,5 @@
 const { default: mongoose } = require('mongoose');
-const CourseModel = require('../models/courseModel');
+const CourseModel = require('../models/Course');
 
 async function getCourses(req, res, next) {
   try {

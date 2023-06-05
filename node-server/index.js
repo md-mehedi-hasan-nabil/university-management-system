@@ -29,6 +29,7 @@ app.use(bodyParser.json());
 //mongoose database
 //mehedi....49 Database
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.kdlsc.mongodb.net/${process.env.DATABASE_NAME}?retryWrites=true&w=majority`;
+
 mongoose
   .connect(uri, {
     useNewUrlParser: true,
@@ -50,12 +51,10 @@ app.get('/', (req, res) => {
       method: 'GET',
       url: '/api/auth/register',
     },
-    ,
     {
       method: 'POST',
       url: '/api/auth/register',
     },
-    ,
     {
       method: 'POST',
       url: '/api/auth/login',

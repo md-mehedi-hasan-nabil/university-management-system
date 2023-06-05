@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
-const AuthUserModel = require('../models/authUserModel');
-const CourseModel = require('../models/courseModel');
+const AuthUserModel = require('../models/AuthUser');
+const CourseModel = require('../models/Course');
 const jwt = require('jsonwebtoken');
 var ObjectId = require('mongodb').ObjectID;
 const { default: mongoose } = require('mongoose');
@@ -101,8 +101,10 @@ async function loginUser(req, res, next) {
         };
         // token generate
         const token = jwt.sign(userInfo, process.env.JWT_SECRET, {
-          expiresIn: process.env.JWT_EXPIRES_IN,
+          expiresIn: 3600000
         });
+
+        console.log(token)
 
         res.status(200).json({
           accessToken: token,
@@ -136,13 +138,13 @@ async function editUser(req, res, next) {
     const id = req.params.id;
     const mongooseId = mongoose.Types.ObjectId(id);
     res.json(mongooseId);
-  } catch (error) {}
+  } catch (error) { }
 }
 
 async function addSelectedSections(req, res, next) {
   try {
     const { userId, courseId, code, title, credits, faculty, limit } = req.body;
-  
+
     const obj = {
       code,
       title,

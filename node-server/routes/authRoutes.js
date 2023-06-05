@@ -6,7 +6,6 @@ const {
   addSelectedSections,
   editUser,
   removeSelectedSections,
-  
   getUserById,
 } = require('../controllers/authController');
 const router = express.Router();
