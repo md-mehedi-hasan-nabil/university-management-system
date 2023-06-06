@@ -5,6 +5,7 @@ export default function Dashboard() {
   return (
     <div>
       <Grades />
+      
     </div>
   );
 }

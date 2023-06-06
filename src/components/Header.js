@@ -68,7 +68,7 @@ export default function Header() {
             value={keyword}
             onChange={(e) => debounce(handleSearch(e.target.value), 200)}
             placeholder="Search..."
-            className="py-2 pl-10 pr-4 w-full border-4 border-transparent placeholder-gray-400 focus:bg-gray-50 rounded-lg"
+            className="py-2 pl-10 pr-4 w-full border-4 border-transparent placeholder-gray-400 focus:bg-gray-50 focus:ring-0 rounded-lg"
           />
         </div>
       )}

@@ -13,6 +13,7 @@ export default function Courses() {
   const selectedSections = useSelector(
     (state) => state.auth?.user?.selectedSections
   );
+
   const [errorShow, setErrorShow] = useState('');
   const {
     data: courses,
@@ -29,6 +30,7 @@ export default function Courses() {
       data: courseAdvisingResult,
     },
   ] = useEditCourseMutation();
+  
   const [editMode, setEditMode] = useState('');
   const [code, setCode] = useState('');
   const [title, setTitle] = useState('');
@@ -37,6 +39,7 @@ export default function Courses() {
   const [advised, setAdvised] = useState(''); 
   const [faculty, setFaculty] = useState('');
 
+  console.log(selectedSections)
 
   useEffect(() => {
     document.title = 'Course Advising Page';

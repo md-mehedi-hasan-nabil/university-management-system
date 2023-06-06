@@ -23,10 +23,10 @@ async function getCourseById(req, res, next) {
 
 async function addCourse(req, res, next) {
   try {
-    const { code, title, credits, faculty, limit, advised, timeAndRoom } = req.body || {}
+    const { code, title, credits, faculty, limit, advised } = req.body || {}
 
     const newCourse = new CourseModel({
-      code, title, credits, faculty, limit, advised, timeAndRoom
+      code, title, credits, faculty, limit, advised
     })
 
     await newCourse.save()
@@ -61,6 +61,7 @@ async function updateCourse(req, res, next) {
     next(error);
   }
 }
+
 
 async function deleteCourse(req, res, next) {
   try {

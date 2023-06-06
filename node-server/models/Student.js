@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const authUserSchema = new Schema(
+const studentSchema = new Schema(
   {
     username: {
       type: String,
@@ -38,17 +38,32 @@ const authUserSchema = new Schema(
       type: String,
       required: true,
     },
+    department: {
+      type: String,
+    },
     role: {
       type: String,
       enum: ['admin', 'user'],
-      default: 'admin',
+      default: 'user',
     },
+    // registeredCourse: {
+    //   type: [Schema.Types.ObjectId],
+    //   ref: "Course",
+    // },
+    selectedSections: {
+      type: [Schema.Types.ObjectId],
+      ref: "course",
+    },
+    totalCredits: {
+      type: Number,
+      default: 0
+    }
   },
   {
     timestamps: true,
   }
 );
 
-const authUserModel = mongoose.model('auth', authUserSchema);
+const StudentModel = mongoose.model('student', studentSchema);
 
-module.exports = authUserModel;
+module.exports = StudentModel;

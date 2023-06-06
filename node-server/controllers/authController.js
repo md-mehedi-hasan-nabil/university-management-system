@@ -2,8 +2,8 @@ const bcrypt = require('bcrypt');
 const AuthUserModel = require('../models/AuthUser');
 const CourseModel = require('../models/Course');
 const jwt = require('jsonwebtoken');
-var ObjectId = require('mongodb').ObjectID;
 const { default: mongoose } = require('mongoose');
+const StudentModel = require('../models/Student');
 
 async function getUser(req, res, next) {
   try {
@@ -16,55 +16,12 @@ async function getUser(req, res, next) {
 
 async function createUser(req, res, next) {
   try {
-    const email = req.body?.email;
-    const existUser = await AuthUserModel.findOne({ email });
-    if (!existUser) {
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
-      const newUser = new AuthUserModel({
-        username: req.body.username,
-        email: req.body.email,
-        password: hashedPassword,
-        phone: req.body.phone,
-        birthday: req.body.birthday,
-        gender: req.body.gender,
-        address: req.body.address,
-        imageUrl: req.body.imageUrl,
-        // maritalStatus: '',
-        // bloodGroup: '',
-        // religion: '',
-        // nationality: '',
-      });
-      console.log(newUser);
+    const { username, password, email, phone, birthday, gender, address, imageUrl } = req.body;
 
-      await newUser.save();
-
-      res.status(201).json({
-        data: {
-          message: 'Account create successfully.',
-        },
-      });
-    } else {
-      res.status(500).json({
-        error: {
-          message: `Email already in use.`,
-        },
-      });
-    }
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function addStudent(req, res, next) {
-  try {
-    const { username, email, phone, birthday, gender, address, imageUrl, department } = req.body || {}
-    const password = username?.split(" ")?.join("")
-    
     const existUser = await AuthUserModel.findOne({ email });
 
     if (!existUser) {
       const hashedPassword = await bcrypt.hash(password, 10);
-
       const newUser = new AuthUserModel({
         username,
         email,
@@ -73,24 +30,14 @@ async function addStudent(req, res, next) {
         birthday,
         gender,
         address,
-        imageUrl,
-        department
+        imageUrl
+        // maritalStatus: '',
+        // bloodGroup: '',
+        // religion: '',
+        // nationality: '',
       });
-      console.log(newUser);
 
       await newUser.save();
-
-      req.info = {
-        email, subject: "Congratulations. You can access in ums dashboard.",
-        message: `Hi ${username}!
-         You can login to ums dashboard.
-         Email: ${email}
-         password: ${password}
-         
-
-         Thanks you.
-         `,
-      }
 
       res.status(201).json({
         data: {
@@ -108,6 +55,7 @@ async function addStudent(req, res, next) {
     next(error);
   }
 }
+
 
 // async function getUserByEmail(req, res, next) {
 //   try {
@@ -135,43 +83,42 @@ async function getUserById(req, res, next) {
 async function loginUser(req, res, next) {
   try {
     const { email, password } = req.body;
-    const existUser = await AuthUserModel.findOne({ email: email });
+    const existAdmin = await AuthUserModel.findOne({ email: email });
+    const student = await StudentModel.findOne({ email: email });
 
-    if (!existUser) {
+    if (!existAdmin && !student) {
       res.status(401).json({
         error: {
           message: 'Email or password is wrong',
         },
       });
     } else {
-      const validPassword = await bcrypt.compare(password, existUser.password);
+      const user = existAdmin ? existAdmin : student
+      const validPassword = await bcrypt.compare(password, user.password);
       if (validPassword) {
         const userInfo = {
-          name: existUser?.username,
-          email: existUser?.email,
-          phone: existUser?.phone,
-          gender: existUser?.gender,
-          role: existUser?.role,
+          name: user?.username,
+          email: user?.email,
+          phone: user?.phone,
+          gender: user?.gender,
+          role: user?.role,
         };
         // token generate
         const token = jwt.sign(userInfo, process.env.JWT_SECRET, {
           expiresIn: 3600000
         });
 
-        console.log(token)
-
         res.status(200).json({
           accessToken: token,
           user: {
-            id: existUser?._id,
-            name: existUser?.username,
-            email: existUser?.email,
-            phone: existUser?.phone,
-            gender: existUser?.gender,
-            role: existUser?.role,
-            imageUrl: existUser?.imageUrl,
-            selectedSections: existUser?.selectedSections,
-            registeredCourse: existUser?.registeredCourse,
+            id: user?._id,
+            name: user?.username,
+            email: user?.email,
+            phone: user?.phone,
+            gender: user?.gender,
+            role: user?.role,
+            imageUrl: user?.imageUrl,
+            selectedSections: user?.selectedSections
           },
         });
       } else {
@@ -318,7 +265,6 @@ module.exports = {
   loginUser,
   getUserById,
   createUser,
-  addStudent,
   editUser,
   addSelectedSections,
   removeSelectedSections,

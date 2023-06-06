@@ -18,7 +18,7 @@ import StudentAdvisingTable from './pages/StudentAdvisingTable';
 import StudentGrades from './pages/StudentGrades';
 import StudentProfile from './pages/StudentProfile';
 import { useGetUserQuery } from './features/auth/authApi';
-import UsersPage from './pages/UsersPage';
+import UsersPage from './pages/AdminUsersPage';
 import AdminDepartment from './pages/AdminDepartment';
 
 export default function App() {
@@ -26,6 +26,7 @@ export default function App() {
   const auth = useSelector((state) => state.auth);
   const [id, setId] = useState('');
   const [loadData, setLoadData] = useState(true);
+
 
   useEffect(() => {
     if (auth?.user?.id) {
@@ -41,6 +42,7 @@ export default function App() {
       skip: loadData,
     }
   );
+
 
   return !authChecked && isSuccess ? (
     <div>Checking authentication....</div>

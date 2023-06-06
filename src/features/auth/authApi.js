@@ -62,6 +62,7 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
+       
           localStorage.setItem(
             'auth',
             JSON.stringify({
@@ -80,13 +81,6 @@ export const authApi = apiSlice.injectEndpoints({
           console.log(err);
         }
       },
-    }),
-    addStudent: builder.mutation({
-      query: (data) => ({
-        url: '/api/auth/add-student',
-        method: 'POST',
-        body: data,
-      }),
     }),
     addCourseAdvising: builder.mutation({
       query: (data) => ({
@@ -136,7 +130,6 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useGetUserQuery,
-  useAddStudentMutation,
   useAddCourseAdvisingMutation,
   useRemoveCourseAdvisingMutation,
   useGetAllUserQuery,

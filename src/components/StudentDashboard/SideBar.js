@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 import logo from '../../assets/seu_logo.png';
 
 export default function SideBar() {
-  const { courses, cashCourses } = useSelector((state) => state.courses);
+  const { courses } = useSelector((state) => state.courses);
   return (
     <aside className="hidden sm:flex sm:flex-col max-h-screen sticky top-0">
       <Link
@@ -24,7 +24,7 @@ export default function SideBar() {
                   </div>
                 </div>
               </li>
-              <li>
+              {/* <li>
                 <NavLink
                   style={({ isActive }) => ({
                     background: isActive ? 'rgb(29 78 216)' : '',
@@ -52,7 +52,7 @@ export default function SideBar() {
                     Dashboard
                   </span>
                 </NavLink>
-              </li>
+              </li> */}
               {/* <li>
                 <NavLink
                   to="/grades"

@@ -24,13 +24,13 @@ async function getDepartment(req, res, next) {
 
 async function addDepartment(req, res, next) {
     try {
-        const { name } = req.body || {}
+        const { name, code } = req.body || {}
 
         const existDepartment = await DepartmentModel.findOne({ name });
 
         if (!existDepartment) {
             const newDepartment = new DepartmentModel({
-                name
+                name, code
             })
 
             await newDepartment.save()
@@ -40,7 +40,7 @@ async function addDepartment(req, res, next) {
                     message: 'Department create successfully.',
                 },
             });
-            
+
         } else {
             res.status(500).json({
                 data: {

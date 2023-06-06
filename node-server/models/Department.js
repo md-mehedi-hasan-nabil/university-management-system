@@ -7,6 +7,11 @@ const departmentSchema = new Schema(
             type: String,
             trim: true,
             required: true
+        },
+        code: {
+            type: String,
+            trim: true,
+            required: true
         }
     },
     {

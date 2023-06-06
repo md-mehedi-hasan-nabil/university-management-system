@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 
 function sendEmail(req, res, next) {
     const { email, message, subject } = req.info || {}
+    console.log(req.info)
     if (email && subject && message) {
         const transporter = nodemailer.createTransport({
             service: 'gmail',

@@ -32,10 +32,6 @@ const courseSchema = new Schema(
       required: true,
       default: 0,
     },
-    timeAndRoom: {
-      type: Date,
-      required: true,
-    },
     courseAdvising: {
       type: Boolean,
       default: false,

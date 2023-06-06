@@ -17,6 +17,11 @@ export const coursesApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    getCourse: builder.query({
+      query: (courseId) => ({
+        url: `/api/courses/${courseId}`,
+      })
+    }),
     addCourse: builder.mutation({
       query: (data) => ({
         url: `/api/courses/`,
@@ -24,7 +29,7 @@ export const coursesApi = apiSlice.injectEndpoints({
         body: data,
       }),
       invalidatesTags: ['courses'],
-    }), 
+    }),
     editCourse: builder.mutation({
       query: (data) => ({
         url: `/api/courses/${data?.id}`,
@@ -38,7 +43,7 @@ export const coursesApi = apiSlice.injectEndpoints({
 
 export const {
   useGetCoursesQuery,
+  useGetCourseQuery,
   useAddCourseMutation,
-  useSelectCourseForAdvisingMutation,
   useEditCourseMutation,
 } = coursesApi;

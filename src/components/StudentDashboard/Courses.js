@@ -2,69 +2,87 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import {
-  useAddCourseAdvisingMutation,
-  useRemoveCourseAdvisingMutation,
-} from '../../features/auth/authApi';
+  useSelectedSectionMutation,
+  useRemovedSectionMutation,
+  useGetStudentQuery
+} from '../../features/student/studentApi.js';
 import { useGetCoursesQuery } from '../../features/courses/coursesApi';
 
 import CourseLoader from '../ui/CourseLoader';
 import Error from '../ui/Error';
 
 export default function Courses() {
-  const { courses } = useSelector((state) => state.courses);
-  const { userInfo } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
   const [errorShow, setErrorShow] = useState('');
-  const { isLoading, isSuccess, isError, error } = useGetCoursesQuery();
+  // get all courses
+  const { isLoading, isSuccess: isSuccessFetchCourses, isError: isFetchCoursesError, error: coursesFetchError, refetch: refetchCourses, data: courses } = useGetCoursesQuery();
+  // get all advising course of registed user
+  const { isSuccess: isSuccessFetchAdvisingCourses, data: advisingCourses, refetch: refetchAdvisingCourses } = useGetStudentQuery({ studentId: user?.id }, {
+    skip: user?.id ? false : true
+  })
+
   const [
     addCourseAdvising,
     {
       // isLoading: isCourseAdvisingLoading,
       isSuccess: isCourseAdvisingSuccess,
       data: courseAdvisingResult,
+      isError: isCourseAdvisingError,
+      error: courseAdvisingError
     },
-  ] = useAddCourseAdvisingMutation();
+  ] = useSelectedSectionMutation();
 
   const [removeCourseAdvising, { isSuccess: isRemoveCourseAdvising }] =
-    useRemoveCourseAdvisingMutation();
+    useRemovedSectionMutation();
 
-  isCourseAdvisingSuccess && console.log(courseAdvisingResult);
 
   useEffect(() => {
     document.title = 'Course Advising Page';
-    if (isError) {
-      setErrorShow(error?.error);
+    if (isFetchCoursesError) {
+      setErrorShow(coursesFetchError?.error);
     }
-    if (isRemoveCourseAdvising) {
-      toast.success('Remove course.');
+    if (isCourseAdvisingError) {
+      toast.error(courseAdvisingError?.data?.error?.message ? courseAdvisingError?.data?.error?.message : "Something is wrong.")
     }
+
+  }, [isFetchCoursesError, coursesFetchError, refetchCourses, refetchAdvisingCourses, isCourseAdvisingError, courseAdvisingError]);
+
+  useEffect(() => {
     if (isCourseAdvisingSuccess) {
+      refetchCourses()
+      refetchAdvisingCourses()
       toast.success('Add course.');
     }
-  }, [isError, error, isCourseAdvisingSuccess, isRemoveCourseAdvising]);
+  }, [isCourseAdvisingSuccess, refetchCourses, refetchAdvisingCourses])
 
+
+  useEffect(() => {
+    if (isRemoveCourseAdvising) {
+      refetchCourses()
+      refetchAdvisingCourses()
+      toast.success('Remove course.');
+    }
+  }, [isRemoveCourseAdvising, refetchCourses, refetchAdvisingCourses])
+
+  // handle Advising Courses for add and remove course
   function handleChange(check, course) {
-    const { code, title, credits, faculty, limit } = course;
     if (check) {
       addCourseAdvising({
-        userId: userInfo?.id,
+        userId: user?.id,
         courseId: course?._id,
-        code,
-        title,
-        credits,
-        faculty,
-        limit,
       });
     } else {
-      removeCourseAdvising({ userId: userInfo.id, courseId: course._id, code });
+      removeCourseAdvising({ userId: user.id, courseId: course._id });
     }
   }
+
 
   let content;
 
   if (isLoading) {
     content = <CourseLoader />;
-  } else if (isSuccess && !isError && courses?.length > 0) {
+  } else if (isSuccessFetchCourses && !isFetchCoursesError && courses?.length > 0) {
     const renderedCourses = courses
       .filter((c) => c.courseAdvising)
       .map((course, index) => (
@@ -76,9 +94,8 @@ export default function Courses() {
                 id="checkbox-table-search-1"
                 onChange={(e) => handleChange(e.target.checked, course)}
                 type="checkbox"
-                checked={userInfo?.selectedSections?.some(
-                  (obj) => obj.code === course.code
-                )}
+
+                checked={advisingCourses?.selectedSections?.includes(course._id)}
                 className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2"
               />
               <label htmlFor="checkbox-table-search-1" className="sr-only">
@@ -101,7 +118,7 @@ export default function Courses() {
       ));
 
     content = renderedCourses;
-  } else if (isError) {
+  } else if (isFetchCoursesError) {
     content = <Error message={errorShow} />;
   } else if (courses?.length === 0) {
     content = <td className="text-lg">No Course Found.</td>;

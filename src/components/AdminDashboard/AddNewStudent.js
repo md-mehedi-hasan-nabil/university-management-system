@@ -1,23 +1,32 @@
-import React from 'react'
-import logo from "../../assets/seu_logo.png"
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
-import { useAddStudentMutation } from '../../features/auth/authApi';
+import { useGetDepartmentsQuery } from '../../features/department/departmentApi';
+import { toast } from 'react-toastify';
+import { useAddStudentMutation } from '../../features/student/studentApi';
 
 export default function AddNewStudent() {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    const [addStudent, { isSuccess: isSuccessAddStudent }] = useAddStudentMutation()
+    const { isSuccess: isSuccessDepartments, data: departments } = useGetDepartmentsQuery()
+    const { register, handleSubmit } = useForm();
+    const [addStudent, { isSuccess: isSuccessAddStudent, data: addStudentResponse, error: addStudentError, isError: isAddStudentError }] = useAddStudentMutation()
 
-    const onSubmit = data => console.log(data);
-    console.log(watch)
+    useEffect(() => {
+        if (isSuccessAddStudent) {
+            toast.success(addStudentResponse?.message ? addStudentResponse?.message : "Student added.")
+        }
+        if (isAddStudentError) {
+            toast.error(addStudentError?.data?.error?.message ? addStudentError?.data?.error?.message : "Something is wrong.")
+        }
+    }, [isSuccessAddStudent, addStudentResponse, isAddStudentError, addStudentError])
+
+
+    const onSubmit = data => {
+        console.log("addStudent(data)")
+        addStudent(data)
+    };
 
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)} className="w-96 mx-auto">
-                <img
-                    className="w-24 mx-auto mt-0 md:-mt-14"
-                    src={logo}
-                    alt="seu_logo"
-                />
                 <h2 className="mb-6 mt-4 text-3xl font-bold text-center ">
                     Add New Student
                 </h2>
@@ -155,10 +164,9 @@ export default function AddNewStudent() {
                 <div className='mb-4'>
                     <label for="department" className="block mb-2 text-sm text-gray-500">Department</label>
                     <select id="department" className="bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                        <option>United States</option>
-                        <option>Canada</option>
-                        <option>France</option>
-                        <option>Germany</option>
+                        {
+                            (isSuccessDepartments && departments?.length > 0) ? departments?.map(department => <option value={department._id}>{department.name}</option>) : <option>No department found</option>
+                        }
                     </select>
                 </div>
 
