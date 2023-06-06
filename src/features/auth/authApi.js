@@ -81,6 +81,13 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    addStudent: builder.mutation({
+      query: (data) => ({
+        url: '/api/auth/add-student',
+        method: 'POST',
+        body: data,
+      }),
+    }),
     addCourseAdvising: builder.mutation({
       query: (data) => ({
         url: `/api/auth/register/${data.userId}`,
@@ -129,6 +136,7 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useGetUserQuery,
+  useAddStudentMutation,
   useAddCourseAdvisingMutation,
   useRemoveCourseAdvisingMutation,
   useGetAllUserQuery,

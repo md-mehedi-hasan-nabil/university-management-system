@@ -7,6 +7,8 @@ const mongoose = require('mongoose');
 
 const authRoutes = require('./routes/authRoutes');
 const courseRoutes = require('./routes/courseRouters');
+const departmentRoutes = require('./routes/departmentRoutes');
+
 const { notFoundHandler, errorhandler } = require('./middlewares/errorHandler');
 const { authCheck } = require('./middlewares/authCheck');
 
@@ -37,7 +39,7 @@ mongoose
   })
   .then(() => console.log('Database connection successful...'))
   .catch((err) => {
-    console.error(err);
+    console.error("mongodb error: " + err);
   });
 
 // all routes
@@ -45,7 +47,11 @@ app.get('/', (req, res) => {
   const routers = [
     {
       method: 'GET',
-      url: '/courses',
+      url: '/api/courses',
+    },
+    {
+      method: 'GET',
+      url: '/api/department',
     },
     {
       method: 'GET',
@@ -67,7 +73,8 @@ app.get('/', (req, res) => {
 // app.use(verifyToken);
 
 app.use('/api/auth', authRoutes);
-app.use('/courses', courseRoutes);
+app.use('/api/courses', courseRoutes);
+app.use('/api/department', departmentRoutes);
 
 // 404 not found handler
 app.use(notFoundHandler);

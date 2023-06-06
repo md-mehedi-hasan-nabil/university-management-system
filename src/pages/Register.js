@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import logo from '../assets/seu_low.png';
+import logo from '../assets/seu_logo.png';
 import bgImage from '../assets/register-bg.jpg';
 import svgImage from '../assets/undraw_mobile_login_re_9ntv.svg';
 import { Link, useNavigate } from 'react-router-dom';

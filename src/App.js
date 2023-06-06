@@ -19,13 +19,14 @@ import StudentGrades from './pages/StudentGrades';
 import StudentProfile from './pages/StudentProfile';
 import { useGetUserQuery } from './features/auth/authApi';
 import UsersPage from './pages/UsersPage';
+import AdminDepartment from './pages/AdminDepartment';
 
 export default function App() {
   const authChecked = useAuthCheck();
   const auth = useSelector((state) => state.auth);
   const [id, setId] = useState('');
   const [loadData, setLoadData] = useState(true);
-   
+
   useEffect(() => {
     if (auth?.user?.id) {
       setId(auth?.user?.id);
@@ -33,7 +34,7 @@ export default function App() {
     }
   }, [auth?.user?.id]);
 
-  
+
   const { isSuccess } = useGetUserQuery(
     { id },
     {
@@ -82,6 +83,15 @@ export default function App() {
             element={
               <PrivateRoute>
                 {auth?.user?.role === 'admin' ? <UsersPage /> : <Login />}
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/department"
+            element={
+              <PrivateRoute>
+                {auth?.user?.role === 'admin' ? <AdminDepartment /> : <Login />}
               </PrivateRoute>
             }
           />

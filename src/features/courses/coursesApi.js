@@ -5,7 +5,7 @@ export const coursesApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getCourses: builder.query({
       query: (data) => ({
-        url: '/courses',
+        url: '/api/courses',
       }),
       providesTags: ['courses'],
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
@@ -17,9 +17,17 @@ export const coursesApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    addCourse: builder.mutation({
+      query: (data) => ({
+        url: `/api/courses/`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['courses'],
+    }), 
     editCourse: builder.mutation({
       query: (data) => ({
-        url: `/courses/${data?.id}`,
+        url: `/api/courses/${data?.id}`,
         method: 'PATCH',
         body: data.body,
       }),
@@ -30,6 +38,7 @@ export const coursesApi = apiSlice.injectEndpoints({
 
 export const {
   useGetCoursesQuery,
+  useAddCourseMutation,
   useSelectCourseForAdvisingMutation,
   useEditCourseMutation,
 } = coursesApi;

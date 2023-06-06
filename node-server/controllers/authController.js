@@ -55,6 +55,60 @@ async function createUser(req, res, next) {
   }
 }
 
+async function addStudent(req, res, next) {
+  try {
+    const { username, email, phone, birthday, gender, address, imageUrl, department } = req.body || {}
+    const password = username?.split(" ")?.join("")
+    
+    const existUser = await AuthUserModel.findOne({ email });
+
+    if (!existUser) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const newUser = new AuthUserModel({
+        username,
+        email,
+        password: hashedPassword,
+        phone,
+        birthday,
+        gender,
+        address,
+        imageUrl,
+        department
+      });
+      console.log(newUser);
+
+      await newUser.save();
+
+      req.info = {
+        email, subject: "Congratulations. You can access in ums dashboard.",
+        message: `Hi ${username}!
+         You can login to ums dashboard.
+         Email: ${email}
+         password: ${password}
+         
+
+         Thanks you.
+         `,
+      }
+
+      res.status(201).json({
+        data: {
+          message: 'Account create successfully.',
+        },
+      });
+    } else {
+      res.status(500).json({
+        error: {
+          message: `Email already in use.`,
+        },
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
 // async function getUserByEmail(req, res, next) {
 //   try {
 //     const email = req.params.email.split('=')[1];
@@ -264,6 +318,7 @@ module.exports = {
   loginUser,
   getUserById,
   createUser,
+  addStudent,
   editUser,
   addSelectedSections,
   removeSelectedSections,

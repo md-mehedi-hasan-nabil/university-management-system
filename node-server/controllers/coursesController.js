@@ -21,7 +21,28 @@ async function getCourseById(req, res, next) {
   }
 }
 
-async function editCourseById(req, res, next) {
+async function addCourse(req, res, next) {
+  try {
+    const { code, title, credits, faculty, limit, advised, timeAndRoom } = req.body || {}
+
+    const newCourse = new CourseModel({
+      code, title, credits, faculty, limit, advised, timeAndRoom
+    })
+
+    await newCourse.save()
+
+    res.status(201).json({
+      data: {
+        message: 'Course add successfully.',
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+async function updateCourse(req, res, next) {
   try {
     const id = req.params.id;
     const mongooseId = mongoose.Types.ObjectId(id);
@@ -41,36 +62,20 @@ async function editCourseById(req, res, next) {
   }
 }
 
-async function addCourse(req, res, next) {
+async function deleteCourse(req, res, next) {
   try {
-    const course = await CourseModel.find({});
+    const id = req.params.id;
+    const course = await CourseModel.deleteOne({ _id: id });
     res.status(200).json(course);
   } catch (error) {
     next(error);
   }
 }
 
-// async function editCourse(req, res, next) {
-//   try {
-//     const course = await CourseModel.findByIdAndUpdate({});
-//     res.status(200).json(course);
-//   } catch (error) {
-//     next(error);
-//   }
-// }
-
-// async function deleteCourse(req, res, next) {
-//   try {
-//     const course = await CourseModel.deleteOne({ _id: req.id });
-//     res.status(200).json(course);
-//   } catch (error) {
-//     next(error);
-//   }
-// }
-
 module.exports = {
   getCourses,
   getCourseById,
-  editCourseById,
+  updateCourse,
   addCourse,
+  deleteCourse
 };

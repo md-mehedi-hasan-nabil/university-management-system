@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
-import logo from '../../assets/seu_low.png';
+import logo from '../../assets/seu_logo.png';
 
 export default function SideBar() {
   const { courses, cashCourses } = useSelector((state) => state.courses);

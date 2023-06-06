@@ -20,6 +20,7 @@ const courseSchema = new Schema(
     },
     faculty: {
       type: String,
+      trim: true,
       required: true,
     },
     limit: {
