@@ -146,6 +146,25 @@ export default function SideBar() {
                   </span>
                 </NavLink>
               </li>
+              <li>
+                <NavLink
+                  to="/payment"
+                  style={({ isActive }) => ({
+                    background: isActive ? 'rgb(29 78 216)' : '',
+                  })}
+                  className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 pr-6"
+                >
+                  <span className="inline-flex justify-center items-center ml-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
+                      <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z" />
+                      <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z" />
+                    </svg>
+                  </span>
+                  <span className="ml-2 text-sm tracking-wide truncate">
+                    Payment
+                  </span>
+                </NavLink>
+              </li>
               <li className="px-5 hidden md:block">
                 <div className="flex flex-row items-center mt-5 h-8">
                   <div className="text-sm font-light tracking-wide text-gray-400 uppercase">

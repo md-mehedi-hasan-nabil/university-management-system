@@ -20,6 +20,7 @@ import StudentProfile from './pages/StudentProfile';
 import { useGetUserQuery } from './features/auth/authApi';
 import UsersPage from './pages/AdminUsersPage';
 import AdminDepartment from './pages/AdminDepartment';
+import Payment from './pages/Payment';
 
 export default function App() {
   const authChecked = useAuthCheck();
@@ -106,6 +107,19 @@ export default function App() {
                   <StudentCourseAdvising />
                 ) : (
                   <Login />
+                )}
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/payment"
+            element={
+              <PrivateRoute>
+                {auth?.user?.role === 'user' ? (
+                  <Payment />
+                ) : (
+                  <NoMatch />
                 )}
               </PrivateRoute>
             }
